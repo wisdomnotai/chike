@@ -1,16 +1,18 @@
 import streamlit as st
 import google.generativeai as genai
-from dotenv import load_dotenv
 import os
 import random
+from dotenv import load_dotenv
 
-# Load .env vars
+# Load local .env file
 load_dotenv()
-API_KEY = os.getenv("API_KEY")
 
-# Validate API key
+# Try Streamlit secrets first, fallback to .env
+API_KEY = st.secrets["API_KEY"] if "API_KEY" in st.secrets else os.getenv("API_KEY")
+
+# Safety check
 if not API_KEY:
-    st.error("API key not found. Add it to your .env file.")
+    st.error("API key not found. Make sure it's in .env (locally) or Streamlit Secrets (cloud).")
     st.stop()
 
 # Configure Gemini
@@ -26,33 +28,32 @@ greetings = {
 
 # Bad excuses
 toxic_excuses = {
-    "tired": "Okay but are you tired or just on TikTok again? 🚀",
-    "don't feel like": "Not feeling like it doesn’t stop deadlines. Wake up 😑",
-    "i give up": "Nah bro. We’re not doing that. Sit up and let’s go again.",
-    "i'm lazy": "That’s a you problem. I’m here working. Let’s lock in.",
-    "later": "Procrastination called — said you’re its bestie. Change that.",
-    "no time": "You had time to text me tho. So let’s be real 🚀"
+    "tired": "Okay but are you tired or just on TikTok again? 💀",
+    "don't feel like": "Not feeling like it doesn’t stop deadlines. Wake up 😐",
+    "i give up": "Nah fam. We’re not folding. Sit up and let’s try again.",
+    "i'm lazy": "That’s a personal L. I’m up, so you better lock in.",
+    "later": "Later never comes bro 😒. Let’s bang this out now.",
+    "no time": "But you had time to text me? Make it make sense 💀"
 }
 
-# Inject Chike's persona
+# Inject Chike's Gen Z personality
 def create_chat():
     chat = model.start_chat(history=[])
     chat.send_message("""
-You are Chike — a study coach chatbot.
-Your main goal is to help students survive exam season with short, real talk advice and clear study roadmaps.
+You are Chike — a Gen Z-coded study coach chatbot.
+You’re here to help students pass exams without sugarcoating anything.
+Your vibe: smart friend who roasts you, hypes you, and helps you win.
 Built by Wisdom Alawode, a math student at the University of Ibadan.
 
 Tone:
-- Friendly, clear, and real.
-- Supportive when they’re tired or stressed.
-- Direct when they’re slacking — help them get back up.
+- Talk like a Gen Z peer. Use slang, be sarcastic but caring.
+- Comfort when they’re tired, roast when they’re slacking.
+- Never sound robotic or motivational speaker-ish.
 
-Conversation Style:
-- Speak clearly and casually, not too Gen Z, not too formal.
-- Only give long responses when asked for study plans or roadmaps.
-- Avoid fluff. No summaries unless necessary. Be brief and actionable.
-
-You’re here to help students pass, no matter what.
+Style:
+- Short replies, like DMs or TikTok comments.
+- Detailed responses ONLY when they ask for study plans.
+- Keep it real. No fluff. No essays.
 """)
     return chat
 
@@ -99,8 +100,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Page title
-st.title("📚 Chike - Study Coach")
-st.caption("Smart advice, chill plans. No fluff. Let’s pass this exam.")
+st.title("📚 Chike - Gen Z Study Coach")
+st.caption("Short replies. Smart plans. Real talk. Built to help you not flop.")
 
 # Developer credit link (embedded)
 st.markdown("""
@@ -127,7 +128,7 @@ for msg in st.session_state.chat.history[1:]:
     st.chat_message(role).write(msg.parts[0].text)
 
 # Input
-user_input = st.chat_input("Ask me anything about exams, study plans or slacking off...")
+user_input = st.chat_input("Tell me what’s up – study probs, exam panic, or excuses…")
 
 if user_input:
     roasted = False
