@@ -69,4 +69,4 @@ Whether you want to:
 - Localize for more African universities,
 - Or help build the scheduling module...
 
-👉 **[Feel free to fork, clone, and submit a PR!](https://github.com/YOUR-USERNAME/chike)**
+👉 **[Feel free to fork, clone, and submit a PR!](https://github.com/wisdomnotai/chike)**
